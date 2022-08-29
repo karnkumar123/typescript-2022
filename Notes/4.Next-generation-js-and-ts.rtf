@@ -1,0 +1,71 @@
+1> const can't be changed or modified
+   const username = 'Ramesh';
+   username = "Rajesh";  // not possible throw error
+
+2> var has function or global scope , it depends where we declare it.
+
+3> let and const has block( {} ) scope.
+
+4> Arrow function 
+    const add = (a, b) => a+b;
+
+5> Default parameters
+    const add = (a: number, b: number=100) => a+b;  // default paranms should be the last
+    add(10);
+
+6> Spread operator
+    -> we apply spread on objects and arrays to pull the items individually.
+    var hobbies = ['cricket game', 'soccer game'];
+    var activeHobbies = ['painting'];
+    activeHobbies.push(...hobbies);
+    console.log(activeHobbies);
+
+    var user = {name: 'karan', age: 23};
+
+    // both referencing the same
+    var hobbiesCopy = hobbies;
+
+    // to create copy
+    var hobbiesCopy = [...hobbies];
+
+    // both referencing the same
+    var userCopy = user;
+
+    // to create copy
+    var userCopy = {...user};
+
+7> Rest parameters
+    -> To combine individually items in an array
+    -> only uses where we accept values like functions parameters
+    const add = (...num: number[]) => {
+        for(let a of num){
+            console.log(a);
+        }
+        return num.reduce((res,currValue) => res + currValue, 0);
+    }
+    console.log(add(10,20,30,40));
+
+8> Array and object destructuring
+    let users = ['ram', 'shyam', 'mohan'];
+    let [user1, user2, user3, user4] = users;
+    console.log(user1, user2, user3, user4);  // ram shyam mohan undefined
+
+    let users = ['ram', 'shyam', 'mohan'];
+    let [user1, ...remainingUser] = users;
+    console.log(user1, remainingUser);  // ram [shyam, mohan]
+
+    // for objects
+    let user = {
+        fullname: 'ramesh',
+        age: 23
+    }
+    let {fullname, age} = user;
+    console.log(fullname, age);  // ramesh 23
+
+    // as alias
+    let user = {
+        fullname: 'ramesh',
+        age: 23
+    }
+    let {fullname: myName, age} = user;  // important fullname as myName
+    console.log(myName, age);

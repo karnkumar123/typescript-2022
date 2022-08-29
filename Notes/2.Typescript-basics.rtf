@@ -1,0 +1,218 @@
+1> Core types
+    -> number (all integer and double comes under number)
+    -> boolean (true or false)
+    -> string (''  or "" or ``) - `` is template literal
+
+2> javascript is dynamic typed(resolved at runtime) language whereas 
+   typescript is static typed(set during development) language.
+
+3> let num1: boolean = 10; // number
+   let isValid: boolean = false; // boolean
+   let phrase: string = 'Result is'; // string 
+
+4> Type Inference
+    -> it is the inbuilt feature of typescript. Typescript is very smart.
+    -> When we declare and initialize variable together , then there is no need of
+       giving the type explicitly.
+       let num: number = 10; // here giving type is redundant. By inference feature 
+       typescript already knows it will be number by assigning element type (10 here).
+
+    -> we can mention type explicitly when we are not initializing at declaration time.
+        let num: number;
+        num = 10;
+
+    -> Inference works really well
+        let num = 10;
+        num = 'Hello';  // typescript shows error here.
+
+    -> let a = 10; - type of a is number
+       let a: number; - type of a is number
+       a = 20
+
+    -> let a;  - type of a is any
+        a=10;  // correct
+        a='hello'; // correct
+        a=false // correct
+
+5> Objects types    
+    const user = {
+        name: 'Max',
+        age: 12
+    }
+    Here, by inference this object has a type automatically i.e, {name: string; age: number}.
+    Even though it is redundant, but we can give type explicitly also like below
+    const user: {
+        name: string;  // it has ; (type has ;)
+        age: number;
+    } = {
+        name: 'Max', // it has , (key value has ,)
+        age: 12
+    }
+
+6> Array
+    const user: {
+        name: string;
+        age: number;
+        hobbies: string[]; // Array<string>
+    } = {
+        name: 'Max',
+        age: 12,
+        hobbies: ['Cricket', 'Football', 'Soccer']
+    }
+    for(let hobby of user.hobbies){
+        console.log(hobby.toUpperCase());
+    }
+
+7> Tuple
+    -> If we know the number of elements and its type in array, then we should use tuple.
+    -> inference doesn't work in tuples. we need to give types explicitly in tuples.
+    const user: {
+        name: string;
+        age: number;
+        role: [number, string, number, boolean]
+    } = {
+        name: 'Max',
+        age: 12,
+        role: [101, 'Admin', 102, false]
+    }
+    for(let rl of user.role){
+        console.log(rl);
+    }
+
+8> Enum 
+    enum Role {ADMIN, DEVELOPER, TESTER};
+
+    const user = {
+        name: 'Max',
+        age: 12,
+        role: Role.ADMIN
+    }
+    enum Role {ADMIN=10, DEVELOPER, TESTER}; // Possible, DEVELOPER would have 11 and tester 12
+    enum Role {ADMIN=21, DEVELOPER=10, TESTER=19}; // Possible
+    enum Role {ADMIN='Admin', DEVELOPER='Developer', TESTER='Tester'}; // possible
+
+9> any type
+    -> any type is very flexible type
+    -> we shouldn't use any type. It takes away all benefits thats typescript provides us.
+    -> let a: any;
+       a=10;
+       a=true;
+       a='nothing'
+       // works same as javascript
+
+10> union type
+    let a: number | string;
+    a=10;
+    console.log(a);  // 10
+    a='nothing';
+    console.log(a); // nothing
+    a=true; // error comes since a is of either number or string type
+
+11> Literal types
+    let name1: 'Arjun' | 'Karan' = 'Arjun';
+    name1 can only hold either Karan or Arjun as its value;
+
+12> Type aliases
+
+    type Combinable = number | string;
+
+    function add(num1: Combinable, num2: Combinable){
+    }
+    or-
+
+    type User = { name: string; age: number };
+    const u1: User = { name: 'Max', age: 30 };
+
+13> Function return types
+
+    function add(num1: number, num2: number){
+        return num1 + num2;
+    }
+    Typescript automatically inferred the return type is number for above add function.
+    Even though it is redundant , but we want to give type explicitly, we can give.
+
+    function add(num1: number, num2: number): number{
+        return num1 + num2;
+    }
+
+    One more return is void if we dont return any thing from the function.
+    Infact we have void type if we dont have even return statement in the function.
+
+    function add(num1: number, num2: number){
+        console.log(num1+num2);
+    }
+
+    explicitly we can write as below
+    function add(num1: number, num2: number): void{
+        console.log(num1+num2);
+    }
+
+14> Function as types
+    var add = function(n1: number, n2: number){
+        return n1+n2;
+    }
+    Typescript infers the type of add function is as below
+    var add: (n1: number, n2: number) => number;
+
+    explicitly also, we can give type as below
+
+    function add(n1: number, n2: number){
+        return n1+n2;
+    }
+    let newAdd: (a: number, b: number) => number = add;  // a and b can be of any name
+    It means newAdd is a function which takes two parameters of number type and return a num type.
+
+15> Function type and callbacks
+    function add(num1: number, num2: number, cb: (a: number) => void){
+        let result: number = 0;
+        setTimeout(() => {
+            result = num1 + num2;
+            cb(result);
+        }, 2000)
+    }
+    add(10, 20, (data) => {
+        console.log(data);
+    });
+
+16> Unknown is a special type. It is better choice than any type.
+    let userInput: any;
+    let userName: string;
+
+    userInput = 'Ramesh';
+    userName = 'Vicky';
+    userName = userInput;  // important
+
+   "any" type can be assigned to any(string, number etc..) type. But it is not possible in Unknown
+
+    let userInput: unknown;
+    let userName: string;
+
+    userInput = 'Ramesh';
+    userName = 'Vicky';
+    userName = userInput;   // error thrown (Type 'unknown' is not assignable to type 'string'.ts(2322))
+
+    Like below , we can do,
+
+    let userInput: unknown;
+    let userName: string;
+
+    userInput = 'Ramesh';
+    userName = 'Vicky';
+    if(typeof userInput === 'string'){
+        userName = userInput;
+    }
+
+17> Never type
+    It is another type we can use with function. This function never returns anything.
+    Void return type functions technicaly return undefined.
+    Suppose, we have one utitily function
+
+    function generateError(message: string, code: number): never{
+        throw {message: message, code: code}; // throw {message, code} when key value has the same name
+    }
+
+    generateError('Error occured due to network inactivity', 300);
+
+
+
+

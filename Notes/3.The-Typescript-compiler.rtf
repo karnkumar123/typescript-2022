@@ -1,0 +1,153 @@
+1> Till Now, we were using tsc app.ts(any file) to compile any ts file to js file.
+   This is not the recommended way although. We will learn all configuration in this section.
+
+2> Whenever we make any changes in the file, we have to have compile the file using tsc command.
+   we can use watch mode like tsc app.ts --watch or tsc app.ts -w to watch the app.ts file 
+   whether we are making any changes to this file or not.
+   Still we have one downside, we can compile only one file at a time. We will get rid of this later.
+
+3> To initilaize a project a typescript project, we will run a command in the root project folder.
+   tsc --init
+   This command creates tsconfig.json file where we have all the configuration.
+   Now run tsc or tsc --watch or tsc -w (this compiles all .ts inside the project root folder).
+
+4> We have many configuration in tsconfig.json file.
+    -> exclude - it excludes the file or folder that we dont want to compile.
+                 It is an array.Here we mention the file names like below
+                "exclude": [
+                    "app.ts", "analytics.ts"
+                ]
+                We can also give wildcard Here
+                "exclude": [
+                    "*.dev.ts"   // any files ends from .dev.ts
+                ]
+                or
+                 "exclude": [
+                    "**/*.dev.ts"  // any .dev.ts file inside any folder (** - folder, * - file)
+                ]
+
+            - if we don't define exclude in tscofig.json file, then there is default folder that
+              is excluded node_modules. But if we define explicitly exclude then we have to have
+              mention node_modules there like below
+               "exclude": [
+                    "node_modules"
+                ]
+
+    -> include - it is opposite of exclude. Here we can give an array of file names or folder also
+                 "include": [
+                    "app.ts", "analytics.ts"
+                ]
+                or
+                "include": [
+                    "src/**/*.ts"  // any .ts files inside any folder inside src folder
+                ]
+
+    -> files - If we have small project we can use files. It is same as include.The difference is
+               it doesn't take any folder only take files names in array like below
+                "files": [
+                    "app.ts", "analytics.ts"
+                ]
+                We use this very rarely.
+
+5> Compilation target
+    -> When we compile ts code to js code, then we will have to mention which version of js 
+       we have to compile like es3, es4, es5, es6, es7 etc
+       Suppose we have es5 which doesn't support let, const or arrow function.
+       if we write code in ts 
+       let a = 10;
+       It will convert in var a = 10; in js
+
+       Suppose we have es6 which supports let const or arrow function.
+       if we write code in ts 
+       let a = 10;
+       It will convert in let a = 10; in js
+
+6> lib
+    -> it is in tsconfig.json file. It tells ts compiler what feature should be provided to typescript.
+    -> we all know typescript doesn't run on browsers. Then how typescript knows document or console thing.
+       because of lib only.
+    -> By default lib is disabled in tsconfig.json file
+       // "lib": [],
+    -> But it accepts all javascript features according to target mentioned in tsconfig.json.
+    -> we can also make it enable to give lib value according to us.But the default value as below
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ScriptHost",
+            "ES6"
+        ]
+
+    -> These four are the same libs consfiguration available when we disabled it.
+
+7> // "allowJs": true,
+  // "checkJs": true,  
+
+  Tsc compiles js file also. Not so important
+
+8>  // "declaration": true, 
+   // "declarationMap": true, 
+
+   It creates .d.ts file which we use when we serve a project as a library. Just like manifest. 
+
+9> Sourcemap helps in debugging and development.
+   -> When we want to debug any file , we can open developer tools in browser and can debug
+      any file in source. But here we will see only js file. Sometimes js file is too tough
+      or cumbersome to debug.Thats why we want to debug only ts file that is lean and very 
+      easy to read.
+
+      "sourceMap": true,  
+      
+      When we compile app.ts file , it will generate two file app.js and app.js.sourceMap
+      And now on developer tools , we can simply open app.ts file in source to debug.
+      This map file works as a bridge between app.ts and app.js.
+
+10> rootDir and outDir
+    -> It is very important. It just tells us from which folder we have to compile and
+      where to stay the compiled output file.
+
+    -> create two folders on the root folder location. src and dist
+    -> src for all input .ts file and dist for all compiled .js code
+    -> it also replicates the same folder structure in dist as src.
+    "rootDir": "./src",    
+    "outDir": "./dist", 
+
+11> // "removeComments": true,     
+   If we set this, whatever the comment we write in .ts file will be removed in compiled
+   js code.
+
+12> // "noEmit": true, 
+   If we dont want to generate output file in .js , just we want to know whether the ts code
+   are written correct or not
+
+13> // "noEmitOnError": true,    
+    Default value is false it means it will generate output js file even if we have a noEmitOnError
+    in compiling.
+    If we set it to true, then it  willn't generate output js file if we have errors.
+
+14> Strict Compilation
+    -> All strict options defined in tsconfig.json file are itself very declarative.
+    -> "strict": true,  means all options are true.
+
+     /* Type Checking */
+    "strict": true,                                      /* Enable all strict type-checking options. */
+    // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+    // "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
+    // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
+    // "strictBindCallApply": true,                      /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
+    // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
+    // "noImplicitThis": true,                           /* Enable error reporting when 'this' is given the type 'any'. */
+    // "useUnknownInCatchVariables": true,               /* Default catch clause variables as 'unknown' instead of 'any'. */
+    // "alwaysStrict": true,                             /* Ensure 'use strict' is always emitted. */
+    // "noUnusedLocals": true,                           /* Enable error reporting when local variables aren't read. */
+    // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read. */
+    // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
+    // "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return in a function. */
+    // "noFallthroughCasesInSwitch": true,               /* Enable error reporting for fallthrough cases in switch statements. */
+    // "noUncheckedIndexedAccess": true,                 /* Add 'undefined' to a type when accessed using an index. */
+    // "noImplicitOverride": true,                       /* Ensure overriding members in derived classes are marked with an override modifier. */
+    // "noPropertyAccessFromIndexSignature": true,       /* Enforces using indexed accessors for keys declared using an indexed type. */
+    // "allowUnusedLabels": true,                        /* Disable error reporting for unused labels. */
+    // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
+
+      
+

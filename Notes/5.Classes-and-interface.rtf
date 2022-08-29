@@ -1,0 +1,318 @@
+1> Latest vanilla js(ES6) does have class concept.
+2> OOPs (oriented oriented programming) - works with real life entities.
+3> Differences between classes and objects:
+
+    Objects:
+        -> The things we work within the code
+        -> instances of class (based on class)
+
+    Class:
+        -> Blueprint for objects (Theoretical definition)
+        -> define how objects looks like, what method and behaviour they have
+        -> classes make creation of multiple similar objects much easier
+
+4> Creat a simple typescript class
+
+    class Departement{
+        name: string;
+        constructor(n: string){
+            this.name = n;
+        }
+    }
+    const accouting = new Departement('Accouning');
+    console.log(accouting);
+
+5> class Departement{
+        name: string;
+        constructor(n: string){
+            this.name = n;
+        }
+        desribe(){
+            console.log(`Department is ${this.name}`);
+        }
+    }
+    const accouting = new Departement('Accouning');
+    accouting.desribe(); 
+
+    // this refers to the object by which we call the method.
+    // Inside describe method, this refers to the Departement object i.e accounting
+
+6> We can explicitly pass this params in method for better understanding and clarity.
+
+    class Departement{
+        name: string;
+        constructor(n: string){
+            this.name = n;
+        }
+        desribe(this: Departement){
+            console.log(`Department is ${this.name}`);
+        }
+    }
+    const accouting = new Departement('Accouning');
+    accouting.desribe();
+
+7> Access modifier
+    -> If we don't mention the modifier, it will be public by default.
+       class Departement{
+            name: string;    // public name: string  (both are same code)
+            .......
+    -> public means we can access that data or method from outside of class also.
+
+    -> if the modifier is private , we can access those within the class only.
+
+    -> sometimes we don't want to access the members of class from outside.
+
+    -> we have one more modifier i.e, protected that we will see later.
+
+    -> Example :-
+        class Departement{
+            name: string;
+            private employees: string[] = [];
+            constructor(n: string){
+                this.name = n;
+            }
+            desribe(this: Departement){
+                console.log(`Department is ${this.name}`);
+            }
+            addEmployee(employee: string){
+                this.employees.push(employee);
+            }
+            printEmployee(){
+                if(this.employees.length === 0){
+                    console.log('There is no employee to print');
+                }else{
+                    for(let emp of this.employees){
+                        console.log(emp);
+                    }
+                }
+            }
+        }
+        const accouting = new Departement('Accouning');
+        accouting.addEmployee('Manu');
+        accouting.addEmployee('Ana');
+        accouting.printEmployee();
+
+
+8> Shorthand initialization
+    class Departement{
+        name: string;
+        id: string;
+        constructor(name: string, id: string){
+            this.name = name;
+            this.id = id;
+        }
+    }
+
+    The above code can also be written as below
+    class Departement{
+        constructor(public name: string, public id: string){
+        }
+    }
+
+9> Readonly properties
+    We know const varaibles can't be reinitialized. But class members (variables) dont use let or const.
+    They can be access using this keyword.
+    So we use Readonly for those variables that shouldn't be reinitialized.
+
+    class Circle{
+        private readonly PI = 3.14;
+        constructor(private radius: number){}
+        area(){
+            this.PI = 0;  // Cannot assign to 'PI' because it is a read-only property.
+            console.log(this.PI * this.radius * this.radius);''
+        }
+    }
+    const c1 = new Circle(7);
+    const c2 = new Circle(14);
+    c1.area();
+    c2.area();
+
+10> Inheritance
+    -> any this statement can only be used after super keyword statement.
+    Example :-
+
+        class LivingBody{
+            no_of_hands: number;
+            no_of_legs: number;
+            constructor(no_of_hands: number, no_of_legs: number){
+                this.no_of_hands = no_of_hands;
+                this.no_of_legs = no_of_legs;
+            }
+        }
+        class Human extends LivingBody{
+            isIntelligence: boolean;
+            constructor(no_of_hands: number, no_of_legs: number, isIntelligence: boolean){
+                super(no_of_hands, no_of_legs);
+                this.isIntelligence = isIntelligence;
+            }
+            getDetails(){
+                return `Hands: ${this.no_of_hands}, Legs: ${this.no_of_legs}, Intelligent: ${this.isIntelligence}`;
+            }
+        }
+        class Animal extends LivingBody{
+            constructor(no_of_hands: number, no_of_legs: number){
+                super(no_of_hands, no_of_legs);
+            }
+            getDetails(){
+                return `Hands: ${this.no_of_hands}, Legs: ${this.no_of_legs}`;
+            }
+        }
+        const human1 = new Human(2,2,true);
+        const animal1 = new Animal(0,4);
+
+        console.log(human1.getDetails());
+        console.log(animal1.getDetails());
+
+11> Method overriding
+    -> we can override the base class method in sub class
+    -> base class data should be of protected type if we are going to use in sub class.
+       private data can only be used within the class and public is accessed everywhere.
+
+       class Department{
+            protected employees: string[];  // protected data
+            constructor(){
+                this.employees = [];
+            }
+            addEmployees(employee: string){
+                this.employees.push(employee);
+            }   
+        }
+        class ITDepartment extends Department{
+            constructor(){
+                super();
+            }
+            addEmployees(employee: string): void {  // method overriding
+                if(employee !== 'max'){
+                    this.employees.push(employee);
+                }
+            }
+        }
+
+
+14> Getter and setter
+
+    class Employee{
+        private empName: string;
+        get mostRecentEmpName(){   // work as a function, we can write more complex logic
+            return this.empName;
+        }
+        set mostRecentEmpName(name){  // work as a function, we can write more complex logic
+            this.empName = name;
+        }
+        constructor(name: string){
+            this.empName = name;
+        }
+    }
+    const emp1 = new Employee('Manu');
+    console.log(emp1.mostRecentEmpName);  // access as a value not method ->getter
+    emp1.mostRecentEmpName = 'lakshmi';   // access as a value not method ->setter
+    console.log(emp1.mostRecentEmpName);
+
+15> static methods and properties
+    -> static methods and properties are those member which doesn't need instance of any class to access it.
+    -> we must have seen Math class properties and methods. Math.pow(2,4)
+       Here wo dont create instance first for math class like const m1 = new Math(); 
+       We directly use Math.pow(2,4) , it means pow is a static method. We generally create
+       utility method as a static method in a class.
+
+    -> static member can never be accessed through this keyword and it is expected.
+
+    -> 
+        class Calculator{
+            public static PI = 3.14;  // or static PI = 3.14;
+            constructor(){}
+            static findArea(radius: number){
+                return Calculator.PI * radius * radius;
+            }
+        }
+        const ans = Calculator.findArea(10);
+        console.log(ans);
+
+
+16> Abstract class
+    -> We are seeing below getvalue of base class is overridden in all subclass, then what is the need
+       of implementation in base class? In this scenerio we make the method as abstract(which doesn't have implementation)
+
+    -> abstract method can only be placed in abstract class
+
+    -> it also force all subclass to override that abstract method or properties
+
+    -> we can't initiate abstract class with new operator, infact there is no need
+
+        class A{
+            constructor(protected name: string){}
+            getvalue(): string{
+                return 'Value of A is ->' +this.name
+            }
+        }
+        class B extends A{
+            constructor(){
+                super('B');
+            }
+            getvalue(): string {
+                return 'Value of B is ->' +this.name
+            }
+        }
+        class C extends A{
+            constructor(){
+                super('C');
+            }
+            getvalue(): string {
+                return 'Value of C is ->' +this.name
+            }
+        }
+
+    -> Example with abstract class
+
+        abstract class A{
+            protected abstract age: number
+            constructor(protected name: string){}
+            
+            abstract getvalue(): string;
+        }
+        class B extends A{
+            protected age: number =10;  // modifier should also match protected in base class
+            constructor(){
+                super('B');
+            }
+            getvalue(): string {
+            
+                return 'Value of B is ->' +this.name
+            }
+        }
+        class C extends A{
+            protected age: number =20; // modifier should also match protected in base class
+            constructor(){
+                super('C');
+            }
+            getvalue(): string {  // overriding
+                return 'Value of C is ->' +this.name
+            }
+        }
+
+
+16> Singletons and private constructor
+    -> If we need only one instance of any class then we can do achieve using private constructor
+    -> the moment we make the constructor private then we never use new operator to create the instance
+       from the outside
+    -> from outside the class, we can call any static method , because calling static method doesn't need
+       new operator. It is called by class name.
+
+    -> Example: -
+    
+    class Department{
+        private static instance: Department;
+        static getInstance(deptname: string, state: string){
+            if(Department.instance){
+                return this.instance;
+            }else{
+                this.instance = new Department(deptname, state);
+                return this.instance;
+            }
+        }
+        private constructor(private name: string, private state: string){}
+    }
+    const d1 = Department.getInstance('d1', 'Bihar')
+    const d2 = Department.getInstance('d2', 'Delhi')
+    console.log(d1);
+    console.log(d2);
