@@ -316,3 +316,143 @@
     const d2 = Department.getInstance('d2', 'Delhi')
     console.log(d1);
     console.log(d2);
+
+
+17> Interface
+    -> Interface infers the structure of an object.
+    -> 
+        interface Person{
+            name: string;
+            age: number;
+            greet(phrase: string): void;
+        }
+        let user1: Person;
+        user1 = {
+            name: 'Max',
+            age: 20,
+            greet(phrase: string){
+                console.log(phrase + " " + this.name);
+            }
+        }
+        user1.greet('Hi I am');
+
+18> class can extend one class but implement as many interfaces. A class has to have implement all
+    members of interface within the class. A abstract class may hava a mixture of concrete and implemented
+    member but interface have only concrete members.
+    We can use interface with class usually
+
+    interface Greetable{
+        name: string;
+        greet(phrase: string): void;
+    }
+    class Person implements Greetable{
+        public age: number;
+        constructor(public name: string, age: number){
+            this.age = age;
+        }
+        greet(phrase: string): void {
+            console.log(phrase + " " + this.name);
+        }
+    }
+    let user1 = new Person('max', 23);
+    console.log(user1);
+    user1.greet('Hello good Evening!');
+
+19> interface members can't be public or private but we can make member readonly that is assigned only once.
+    interface Greetable{
+        readonly name: string;
+        greet(phrase: string): void;
+    }
+    let user1: Greetable = {
+        name: 'Kumar',
+        greet(){
+            console.log('hello');
+            this.name = 'Max';  // Cannot assign to 'name' because it is a read-only property.ts
+        }
+    }
+
+20> class can extend only one class but interface may extend many interface.
+    interface Name{
+        name: string;
+    }
+    interface Age{
+        age: number;
+    }
+    interface Greetable extends Name, Age{
+        greet(phrase: string): void;
+    }
+    class Person implements Greetable{
+        name: string;
+        age: number;
+        constructor(name: string, age: number){
+            this.age = age;
+            this.name = name;
+        }
+        greet(phrase: string): void {
+            console.log(phrase);
+        }
+    }
+
+21> Interface as function types . It is very rare to use.
+    type addFn = (a: number, b: number) => number;
+    let add: addFn;
+    add = (a: number, b: number) => {
+        return a+b;
+    }
+    console.log(add(2,4));
+
+    we can replace addFn with interface like below
+    interface addFn{
+        (a: number, b: number): number;
+    }
+    let add: addFn;
+    add = (a: number, b: number) => {
+        return a+b;
+    }
+    console.log(add(2,4));
+
+22> optional params and properties
+    -> optional members can be functional params, interface member or anything
+    -> 
+        interface Person{
+            name: string,
+            age: number,
+            city?: string;
+        }
+        let user1: Person = {
+            name: 'priya',
+            age: 34
+        }
+
+23> There is no such things like interface in javascript. Interface will be changed into constructor function
+    in javascript during population stage.
+
+24> Interface is purely typescript feature.
+
+25> we may create optional methods as well.
+    interface Person{
+        name: string;
+        greet?(name: string): string;
+    }
+    let user: Person = {
+        name: 'Karan'
+    }
+
+26> We can also use custom type in place of interface but interface is more recommneded way to use.
+   interface Person{
+        name: string;
+        greet?(name: string): string;
+    }
+    let user: Person = {
+        name: 'Karan'
+    }
+
+    or
+
+    type Person = {
+        name: string;
+        greet?(name: string): string;
+    }
+    let user: Person = {
+        name: 'Karan'
+    }
