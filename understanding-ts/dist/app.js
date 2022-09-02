@@ -1,5 +1,5 @@
 "use strict";
-let user = {
-    name: 'Karan'
-};
+const userInput = null;
+const storedData = userInput !== null && userInput !== void 0 ? userInput : 'DEFAULT';
+console.log(storedData);
 //# sourceMappingURL=app.js.map

@@ -1,7 +1,3 @@
-type Person = {
-    name: string;
-    greet?(name: string): string;
-}
-let user: Person = {
-    name: 'Karan'
-}
+const userInput = null;
+const storedData = userInput ?? 'DEFAULT';
+console.log(storedData);

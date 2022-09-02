@@ -1,0 +1,204 @@
+1> Intersection types
+    -> type and interface are more or less same
+    
+        type Admin = {
+            name: string,
+            privilidges: string[]
+        }
+
+        type Employee = {
+            name: string,
+            startDate: Date;
+        }
+
+        type ElevetedEmployee = Admin & Employee;  // includes both admin and employee
+
+        const user1: ElevetedEmployee = {
+            name: 'Max',
+            privilidges: ['create-server', 'delete-server'],
+            startDate: new Date()
+        }
+
+        console.log(user1);
+
+    -> 
+        type numeric = string | number;  // union
+        type booleanumeric = number | boolean;
+        type combinable = numeric & booleanumeric;
+
+        let a: combinable = 3;  // common of numeric and booleanumeric is number
+
+2> More on Type guards
+    -> typeof guards    
+        type combinable = string | number;
+        function add(a: combinable, b: combinable){
+            if(typeof a === 'number' && typeof b === 'number'){
+                return a+b;
+            }else{
+                return a.toString() + b.toString();
+            }
+        }
+
+    -> keyname in object type guard
+        type Admin = {
+            name: string,
+            privilidges: string[]
+        }
+
+        type Employee = {
+            name: string,
+            startDate: Date;
+        }
+
+        type ElevatedEmployee = Admin & Employee;
+
+        const emp: ElevatedEmployee = {
+            name: 'Ruckus',
+            privilidges: ['create-server', 'delete-server'],
+            startDate: new Date()
+        }
+
+        function PrintEmployeeDetails(emp: Admin | Employee){
+            console.log(emp.name);
+            if('privilidges' in emp){
+                console.log(emp.privilidges)
+            }
+            if('startDate' in emp){
+                console.log(emp.startDate);
+            }
+        }
+        PrintEmployeeDetails(emp);
+
+    -> instance of guards (works with class not interface)
+        class Car{
+            drive(){
+                console.log('Driving a car');
+            }
+        }
+
+        class Truck{
+            drive(){
+                console.log('Driving a truck');
+            }
+            loadCargo(weight: number){
+                console.log('Amount of weight is '+weight);
+            }
+        }
+        let c1 = new Car();
+        let t1 = new Truck();
+
+        type Vehicle = Car | Truck;
+
+        function useVehicle(v: Vehicle){
+            v.drive();
+            if(v instanceof Truck){
+                v.loadCargo(200);
+            }
+        }
+
+        useVehicle(t1);
+        useVehicle(c1);
+
+3> Discriminated unions
+    -> 
+        interface Bird{
+            type: 'bird';  // Discriminated type which is common in both and by which we differentiate these.
+            flyingSpeed: number;
+        }
+        interface Horse{
+            type: 'horse';
+            runningSpeed: number;
+        }
+
+        function getSpeed(animal: Bird | Horse){
+            switch(animal.type){
+                case 'bird': 
+                    console.log(animal.flyingSpeed);
+                    break;
+                case 'horse':
+                    console.log(animal.runningSpeed);
+                    break;
+            }
+        }
+
+        let animal1: Bird = {
+            type: 'bird',
+            flyingSpeed: 30
+        }
+        getSpeed(animal1);
+
+        let animal2: Horse = {
+            type: 'horse',
+            runningSpeed: 300
+        }
+
+        getSpeed(animal2);
+
+4> Type casting
+    -> In html
+        <input type="text" id="name-input" placeholder="enter your name">
+
+    -> In ts
+        const inputElement = document.getElementById('name-input')! as HTMLInputElement;
+        inputElement.value = 'Karan Singhania';
+
+        ! tells us that it never be null.
+
+        const inputElement = <HTMLInputElement>document.getElementById('name-input')!;
+        inputElement.value = 'Karan Singhania';
+
+5> Index properties
+    -> If we dont know the number and name of keys(props) of an object, then we can use index properties.
+    ->
+        interface MyError{
+            [key: string]: string;
+        }
+        const err1: MyError = {
+            'email': 'Hello'
+        }
+
+        const err2: MyError = {
+            'password': 'Passwordi is wrong'
+        }
+
+        console.log(err1.email);
+        console.log(err2.password);
+
+6> Function overloads
+    type combinable = number | string;
+
+    function add(a: string, b: number): string;
+    function add(a: number, b: string): string;
+    function add(a: string, b: string): string;
+    function add(a: number, b: number): number;
+    function add(a: combinable, b: combinable){
+        if(typeof a === 'number' && typeof b === 'number'){
+            return a+b;
+        }else{
+            return a.toString() + b.toString();
+        }
+    }
+    let fullname = add('karan', ' kumar');
+    console.log(fullname.split(' ')); // we can't use split if we don't overload the function 
+    or we can do as 
+        let fullname = add('karan', ' kumar') as string;
+
+7> Optional chaining
+    -> Mainly we use this not for getting runtime error while accessing any object's key.
+    -> 
+        const dataFromBackend = {
+            name: 'mac',
+            salary: {
+                monthly: 2000
+            }
+        }
+        console.log(dataFromBackend?.salary?.monthly);
+
+8> Nullish Coalescing
+    -> 
+        const userInput = null;
+        const storedData = userInput ?? 'DEFAULT';
+        console.log(storedData);
+
+        if userInput is null or undefined then only storedData will be "DEFAULT" otherwise it stored the userInput's value.
+
