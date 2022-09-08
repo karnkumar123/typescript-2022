@@ -62,4 +62,72 @@
             }
             T extends Person
 
-5> 
+5> More generic function   
+    -> the functions acceps only those type which has length like string and array.
+       Because we have T generic type and it doesn't has Lenght so we use extends to have length property.
+
+    interface Lenghty{
+        length: number;
+    }
+
+    function countAndDesribe<T extends Lenghty>(element: T): [T, string]{
+        if(element.length === 1){
+            return [element, 'Got 1 element'];
+        }else if(element.length > 1){
+            return [element, `Got ${element.length} elements`];
+        }
+        return [element, 'Got no element'];
+    }
+    console.log(countAndDesribe('Hi World'));
+    console.log(countAndDesribe(['cooking', 'Painting']));
+    console.log(countAndDesribe([]));
+
+
+6> The keyOf constraint
+    -> 
+        function getValueOfKey(obj: object, key: string){
+            return obj[key]; // throws error because ts doesn't know whether key exists in that object or not
+        }
+
+        console.log(getValueOfKey({name: 'Ramesh'}, 'name'));
+
+    -> Solution (keyof operator)
+        function getValueOfKey<T extends object, U extends keyof T>(obj: T, key: U){
+            return obj[key];
+        }
+
+        console.log(getValueOfKey({name: 'Ramesh'}, 'name'));
+
+7> A generic class
+    -> 
+        class DataStorage<T extends number | string | boolean>{
+            private listOfItems;
+
+            constructor(listofItems: T[]){
+                this.listOfItems = listofItems;
+            }
+
+            addItem(item: T){
+                this.listOfItems.push(item);
+            }
+
+            removeItem(item: T){
+                this.listOfItems.splice(this.listOfItems.indexOf(item),1);
+            }
+
+            getItems(): T[]{
+                return [...this.listOfItems];
+            }
+        }
+
+        let numberDataStorage = new DataStorage<number>([1,2]);
+        numberDataStorage.addItem(3);
+        numberDataStorage.addItem(4);
+        numberDataStorage.removeItem(3);
+        console.log(numberDataStorage.getItems());
+
+        let stringDataStorage = new DataStorage<string>(['Amar']);
+        stringDataStorage.addItem('Akbar');
+        stringDataStorage.addItem('Anthony');   
+        stringDataStorage.removeItem('Akbar');
+        console.log(stringDataStorage.getItems());
