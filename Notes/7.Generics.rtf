@@ -64,7 +64,7 @@
             T extends Person
 
 5> More generic function   
-    -> the functions acceps only those type which has length like string and array.
+    -> the functions accepts only those type which has length ,like string and array.
        Because we have T generic type and it doesn't has Lenght so we use extends to have length property.
 
     interface Lenghty{
@@ -132,3 +132,41 @@
         stringDataStorage.addItem('Anthony');   
         stringDataStorage.removeItem('Akbar');
         console.log(stringDataStorage.getItems());
+
+8> Generic utility types 
+    -> Partial is used when we decide to assign value in object one by one or partially but not possible at once.
+    -> it makes all the objects's member optional
+    -> e.g,
+        interface Person{
+            name: string;
+            age: number;
+        }
+        function assignValue(name: string, age: number){
+            let myPerson: Partial<Person> = {};
+            myPerson.name = name;
+            myPerson.age = age;
+            return myPerson;
+        }
+        console.log(assignValue('ram', 25));
+
+9> Difference between union and generic
+    -> union
+        function getLength(num: number | string){
+            if(typeof(num) === 'string'){
+                return num.length;
+            }else{
+                return Math.pow(num,2);
+            }
+        }
+        console.log(getLength(3));
+        console.log(getLength('ramesh'));
+        we can pass number or string any time we call the method everytime
+
+    -> Generic  
+        First we decide the type and then stick to it.
+
+        function getLength<T extends number>(num: T){
+            return Math.pow(num, 2);
+        }
+        console.log(getLength(3));
+
